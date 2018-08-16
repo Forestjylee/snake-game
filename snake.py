@@ -46,7 +46,7 @@ def gen_food(snakes):
 
     return pos
 
-#
+#将点在图上渲染出来
 def rect(window, point, color):
     cell_width = W/COL
     cell_height = H/ROW
@@ -59,8 +59,7 @@ def rect(window, point, color):
         (left, top, cell_width, cell_height)
     )
 
-
-def game(direct='left'):
+def game(init_scores=0, direct='left', speed=20):
     '''初始方向为left
        蛇的长度为3
     '''
@@ -70,9 +69,9 @@ def game(direct='left'):
     size = (W, H)
 
     window = pygame.display.set_mode(size)
-    pygame.display.set_caption('贪吃蛇')
+    pygame.display.set_caption('贪吃蛇O(∩_∩)O')
     #游戏循环
-    scores = 0
+    scores = init_scores
     snakes = [
         Point(row=head.row, col=head.col + 1),
         Point(row=head.row, col=head.col + 2),
@@ -168,8 +167,9 @@ def game(direct='left'):
         pygame.display.flip()
 
         #设置帧频
-        clock.tick(20)
+        clock.tick(speed)
     pygame.quit()
+    return scores
 
 if __name__ == '__main__':
     while True:

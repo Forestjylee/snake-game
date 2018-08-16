@@ -1,1 +1,1 @@
-python snake.py
+python shell.py
