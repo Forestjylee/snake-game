@@ -63,11 +63,13 @@ def shell():
         if not rank_info:
             return
         table2 = PrettyTable(["名字", "分数"])
+        rank_info = sorted(rank_info, key=lambda x:-x['scores'])
         for info in rank_info:
             table2.add_row([info['name'], info['scores']])
-        table2.sort_key("分数")
-        table2.reversesort = True
         print(table2)
+    elif command == 't':
+        #TODO 托管
+        pass
 
 if __name__ == '__main__':
     print(table)

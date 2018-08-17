@@ -107,6 +107,8 @@ def game(init_scores=0, direct='left', speed=20):
         if eat:
             print("分数+1")
             scores += 1
+            if scores % 20  == 0:
+                speed += 2          # 每20分为一个分界点,越来越快
             food = gen_food(snakes=snakes)
 
         #处理身子
@@ -160,13 +162,14 @@ def game(init_scores=0, direct='left', speed=20):
         #蛇身，蛇头，食物
         for snake in snakes:
             rect(window, snake, snake_color)
-            rect(window, head, head_color)
-            rect(window, food, food_color)
+        rect(window, head, head_color)
+        rect(window, food, food_color)
 
         #将选然后的界面显示出来
         pygame.display.flip()
 
         #设置帧频
+
         clock.tick(speed)
     pygame.quit()
     return scores
