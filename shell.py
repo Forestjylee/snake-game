@@ -1,6 +1,8 @@
 import os
 import json
+import time
 import pickle
+import datetime
 from snake import game
 from prettytable import PrettyTable
 
@@ -25,7 +27,7 @@ def load_setting():
         setting_info = json.load(f)
         return setting_info
 
-def save_rank(scores, name):
+def save_rank(scores, name, efficiency):
     rank_info = load_rank()
     with open('rank.pck', 'wb') as f:
         if not rank_info:
@@ -33,6 +35,8 @@ def save_rank(scores, name):
         info = {
             'name':name if name else '用户',
             'scores':scores,
+            'efficiency':efficiency,
+            'datetime':datetime.datetime.now(),
         }
         rank_info.append(info)
         pickle.dump(rank_info, f)
@@ -51,9 +55,12 @@ def shell():
     if command == 's' or command == 'go':
         setting_info = load_setting()
         print("游戏正在运行...")
+        start_time = time.time()
         scores = game(init_scores=setting_info['init_scores'], speed=setting_info['speed'])
+        end_time = time.time()
+        efficiency = round(scores/(end_time-start_time),5)
         name = input("请输入您的名字:")
-        save_rank(scores=scores, name=name)
+        save_rank(scores=scores, name=name, efficiency=efficiency)
     elif command == 'h' or command == '?' or command == '？':
         print(table)
     elif command == 'set':
@@ -62,11 +69,17 @@ def shell():
         rank_info = load_rank()
         if not rank_info:
             return
-        table2 = PrettyTable(["名字", "分数"])
+        table2 = PrettyTable(["名字", "分数", "完成时间"])
         rank_info = sorted(rank_info, key=lambda x:-x['scores'])
         for info in rank_info:
-            table2.add_row([info['name'], info['scores']])
+            table2.add_row([info['name'], info['scores'], info['datetime']])
         print(table2)
+        print('--------------------------------------------------')
+        table3 = PrettyTable(["名字", "效率值", "完成时间"])
+        rank_info = sorted(rank_info, key=lambda x:-x['efficiency'])
+        for info in rank_info:
+            table3.add_row([info['name'], info['efficiency'], info['datetime']])
+        print(table3)
     elif command == 't':
         #TODO 托管
         pass
